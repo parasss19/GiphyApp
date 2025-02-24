@@ -7,6 +7,7 @@ import Categories from './pages/Categories'
 import SearchPage from './pages/SearchPage'
 import FavouritePage from './pages/FavouritePage'
 import SingleGifPage from './pages/SingleGifPage'
+import {GifProvider} from './context/GifContext'
 
 
 //new way of writing routes (diff than we learn in codevolution)
