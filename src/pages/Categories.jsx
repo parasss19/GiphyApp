@@ -29,7 +29,7 @@ const Categories = () => {
       <div className=''>
         {results.slice(0,1).map((gif) => (
           <Gif key={gif.id} gif={gif}  />
-        ))}
+        ))}  
 
         <span>Dont&apos;t tell it to me, GIF it to me!</span>
 

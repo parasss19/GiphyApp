@@ -1,7 +1,7 @@
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { createContext, useState } from "react";
 
-const GifContext = createContext()     
+const GifContext = createContext();     
 
 //we use GifProvider in app.jsx to wrap entire routes of our appln
 const GifProvider = ({children}) => {
@@ -13,10 +13,10 @@ const GifProvider = ({children}) => {
 
     return(
      <>
-     <GifContext.Provider value={{gf, gifs,setGifs, filter, setFilter, favorites}}>     {/* The inner braces define that object with key value like gf:gf, gifs:gifs, etc., using the ES6 shorthand for object properties. */}
+     <GifContext.Provider value={{gf, gifs, setGifs, filter, setFilter, favorites}}>     {/* The inner braces define that object with key value like gf:gf, gifs:gifs, etc., using the ES6 shorthand for object properties. */}
         {children} 
      </GifContext.Provider>
      </>
     )
 }
-export { GifProvider, GifContext}
+export { GifProvider, GifContext} 
