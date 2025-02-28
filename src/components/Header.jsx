@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { HiDotsVertical, HiMenuAlt3  } from 'react-icons/hi';
 import { GifContext } from '../context/GifContext';
+import SearchBarGifs from './SearchBarGifs';
 
 
 const Header = () => {
   const [categories, setCategories] = useState([])
   const [showCategories, setShowCategories] = useState(false);
 
-  const {gf, gifs, filter, favorites} = useContext(GifContext)
-
+  const {gf, favorites} = useContext(GifContext)
 
   //Fetching gif categories
   const fetchGifCategories = async () =>{
@@ -26,18 +26,20 @@ const Header = () => {
     <>
     {/* Navbar */}
     <nav>
-        
-        <div className='relative flex gap-2 justify-between items-center mb-2'>
-          {/* Logo */}
+      
+      <div className='relative flex gap-2 justify-between items-center mb-2'>
+          {/* 1 Logo */}
           <Link to= '/' className='flex gap-2'> 
             <img src="/logo.svg" alt="giphy-logo" className='w-8' />
-            <h1 className='text-5xl font-bold curson-pointer'>Giphy</h1>
+            <h1 className='text-[38px] font-extrabold curson-pointer'>STICKY</h1>
           </Link>
           
-          {/* Different Navigation/Categories */}
+          {/* 2 Different Navigation/Categories */}
           <div className='flex gap-2 items-center text-md font-bold'>
+            
+            {/* Top 5 categories we render in header */}
             {
-              //here we only want to show 5 navigation/category in header so we slice(0,5) categories and rest inside 3 dots icon
+              //we slice(0,5) categories and rest inside 3 dots icon
               categories?.slice(0,5).map((category) => (
                   <Link 
                    key={category.name}
@@ -60,7 +62,7 @@ const Header = () => {
 
 
             {/* Favourite gifs */}
-            <div className='bg-gray-700 h-9 py-1 px-2 rounded cursor-pointer'>
+            <div className="text-sm bg-gray-700 px-2 py-2 cursor-pointer rounded sm:text-lg sm:px-4">
               <Link to="/favorite">Favorite GIFs</Link>
             </div>
 
@@ -69,11 +71,12 @@ const Header = () => {
             <button>
              <HiMenuAlt3 size={30} className="text-sky-400 block lg:hidden" />
             </button>
+            {/* Mobile View */}
           </div>
 
-          {/* when click on 3 dots then categories open */}
+          {/* 3 when click on 3 dots then categories open */}
           {showCategories && (
-            <div className='absolute right-0 top-16 px-6 pt-6 pb-9 w-full gradienteffect z-20'> 
+            <div className='absolute right-0 top-15 px-6 pt-6 pb-9 w-full gradienteffect z-20'> 
               <span className='text-3xl font-extrabold'>Categories</span>
               <hr className='bg-gray-100 opacity-50 my-4'/>
               <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
@@ -91,12 +94,12 @@ const Header = () => {
               </div>
             </div>
           )}
-        </div>
+      </div>
 
 
-
-      {/* Gif Search Bar */}
-
+      {/* 4 Gif Search Bar */}
+      <SearchBarGifs/>
+      
 
     </nav>
     </>
