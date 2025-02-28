@@ -5,3 +5,7 @@
 @utility gradienteffect{
     @apply bg-gradient-to-r from-teal-600 via-blue-600 to-pink-600;
 }
+
+.png-pattern {
+    background-image: url('/bg.png');
+}
