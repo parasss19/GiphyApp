@@ -5,7 +5,7 @@ const Gif = ({gif, hover = true}) => {
     <>
       {/* url of each gif look like => http://localhost:5173/gif/heatherrobertsart-birthday-happy-cake-wGKrkvHxZT6PVpw635 */}
       <Link to={`/${gif.type}/${gif.slug}`} >
-        <div className="relative w-full mb-2 cursor-pointer group aspect-video">
+        <div className="relative w-full mb-2 cursor-pointer group aspect-video png-pattern">
           <img 
             //each gif have images property inside it have fixed_width property and inside it have webp address of gif
             src={gif?.images?.fixed_width.url} 
