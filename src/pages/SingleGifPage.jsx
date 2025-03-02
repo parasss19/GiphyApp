@@ -43,7 +43,7 @@ const SingleGifPage = () => {
     
     fetchSingleGif()
     fetchRelatedGif()
-  },[])
+  },[slug])  //whenever user click on related gifs then slug changed and we want to show that related gif so we re-render whenever slug changed in url
 
 
   return (
