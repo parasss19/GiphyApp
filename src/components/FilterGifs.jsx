@@ -35,7 +35,7 @@ const FilterGifs = ({alignLeft = false, showTrendingIcon = false}) => {
             <span className='font-semibold text-gray-300 text-[20px]'>Trending</span>
         </div>
        )}
-     
+      
       {/* Filter */}
       <div className='flex gap-2 rounded-full bg-gray-800'>
         {filters.map((f) =>(

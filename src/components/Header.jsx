@@ -9,7 +9,7 @@ const Header = () => {
   const [categories, setCategories] = useState([])
   const [showCategories, setShowCategories] = useState(false);
 
-  const {gf, favorites} = useContext(GifContext)
+  const {gf} = useContext(GifContext)
 
   //Fetching gif categories
   const fetchGifCategories = async () =>{
