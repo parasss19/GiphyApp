@@ -9,6 +9,7 @@ const FavouritePage = () => {
 
   useEffect(() =>{
     const fetchFavoriteGifs = async () =>{
+      // console.log(favorites)
       const {data} = await gf.gifs(favorites)
       setFavoriteGifs(data)
     }
@@ -30,7 +31,7 @@ const FavouritePage = () => {
         ) : (
           <div className='flex flex-col justify-center items-center gap-3 w-full mt-4'>
             <span className='font-extrabold text-lg sm:text-2xl '>No favourites</span>
-            <img src="tomJerry.gif " alt="tom and jerry" />
+            <img src="tomJerry.gif" alt="tom and jerry" />
           </div>
         )}
       </div>
