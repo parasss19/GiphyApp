@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HiDotsVertical, HiMenuAlt3  } from 'react-icons/hi';
 import { GifContext } from '../context/GifContext';
 import SearchBarGifs from './SearchBarGifs';
@@ -11,15 +11,19 @@ const Header = () => {
 
   const {gf} = useContext(GifContext)
 
-  //Fetching gif categories
-  const fetchGifCategories = async () =>{
-    const {data} = await gf.categories()
-    setCategories(data)
-  }
-  //call fetchGifCategories inside useEffect and pass empty dependency so it run only once when comp mount
+  const location = useLocation(); //Detects route changes to close drop down of categories automatically whenever route change
+
+  //Fetching gif categories - whenever our route change(detect using useLocation()) then useEffect re-render and also close categories by setShowCategories(false);
   useEffect(() =>{
+    const fetchGifCategories = async () =>{
+      const {data} = await gf.categories()
+      console.log(data);
+      setCategories(data)
+    }
     fetchGifCategories()
-  },[])
+
+    setShowCategories(false);
+  },[location.pathname])
 
 
   return (
@@ -41,11 +45,11 @@ const Header = () => {
             {
               //we slice(0,5) categories and rest inside 3 dots icon
               categories?.slice(0,5).map((category) => (
-                  <Link 
-                   key={category.name}
-                   to={`/${category.name_encoded}`} 
-                   className = 'px-4 py-1 hover:gradienteffect border-b-4 hidden lg:block'
-                  >
+                <Link 
+                  key={category.name}
+                  to={`/${category.name_encoded}`} 
+                  className = 'px-4 py-1 hover:gradienteffect border-b-4 hidden lg:block'
+                >
                   {category.name}
                  </Link>
                 )
@@ -53,7 +57,7 @@ const Header = () => {
             }
 
             {/* three dots  */}
-            <button onClick={() => setShowCategories((showCategories) => !showCategories)}>
+            <button onClick={() => setShowCategories(!showCategories)}>
               <HiDotsVertical 
                 size={35} 
                 className = 'py-1 hover:gradienteffect border-b-4 hidden lg:block'
@@ -68,10 +72,10 @@ const Header = () => {
 
             {/* Mobile View */}
             {/* Hamburger for small screen */}
-            <button>
+            <button onClick={() => setShowCategories(!showCategories)} >
              <HiMenuAlt3 size={30} className="text-sky-400 block lg:hidden" />
             </button>
-            {/* Mobile View */}
+            {/* Mobile View end */}
           </div>
 
           {/* 3 when click on 3 dots then categories open */}
