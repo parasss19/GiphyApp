@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import AppLayout from './layout/AppLayout'
-import HomePage from './pages/HomePage'
-import Categories from './pages/Categories'
-import SearchPage from './pages/SearchPage'
-import FavouritePage from './pages/FavouritePage'
-import SingleGifPage from './pages/SingleGifPage'
+import AppLayout from "./layout/AppLayout";
+
+import HomePage from './pages/HomePage';
+import FavouritePage from './pages/FavouritePage';
+import SearchPage from './pages/SearchPage';
+import SingleGifPage from './pages/SingleGifPage';
+
+// Lazy-loaded components
+const Categories = lazy(() => import("./pages/Categories"));
+
 import {GifProvider} from './context/GifContext'
+import Loader from './components/Loader';
 
 
 //new way of writing routes (diff than we learn in codevolution)
@@ -20,11 +25,15 @@ const router = createBrowserRouter([
     children: [
       {
        path: '/',
-       element: <HomePage/>
+       element:  <HomePage/>
       },
       {
         path: '/:category',
-        element: <Categories/>
+        element: (
+        <Suspense fallback={<Loader/>}>
+          <Categories/>
+        </Suspense>
+        )
       },
       {
         path: '/search/:query',
@@ -36,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/favorite',
-        element: <FavouritePage/>
+        element:<FavouritePage/>
       }
    ]
   }
@@ -53,3 +62,4 @@ const App = () => {
 }
 
 export default App
+

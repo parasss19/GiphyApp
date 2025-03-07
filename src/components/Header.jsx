@@ -17,7 +17,7 @@ const Header = () => {
   useEffect(() =>{
     const fetchGifCategories = async () =>{
       const {data} = await gf.categories()
-      console.log(data);
+      //console.log(data);
       setCategories(data)
     }
     fetchGifCategories()
