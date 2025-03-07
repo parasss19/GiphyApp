@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GifContext } from '../context/GifContext'
 import FilterGifs from '../components/FilterGifs'
-import Gif from '../components/Gif'
+
+import Loader from '../components/Loader';             //our loader component
+const Gif = lazy(() => import("../components/Gif"));   //Lazy-load the Gif component
+
 
 const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([])
@@ -37,12 +40,13 @@ const SearchPage = () => {
 
       {/* Now we render the gifs based on query */}
       {searchResults.length ? (
-        <div className='columns-2 md:columns-3 lg:columns-4 gap-2'>
-          {searchResults.map((gif) => (
-            <Gif gif = {gif} key={gif.id}/>
-           ))
-          }
-       </div>
+        <Suspense fallback={<Loader/>}>
+          <div className='columns-2 md:columns-3 lg:columns-4 gap-2'>
+            {searchResults.map((gif) => (
+              <Gif gif = {gif} key={gif.id}/>
+            ))}
+          </div>
+       </Suspense>
       ) : (
         <span>
           No Gifs found for {query}. Try searching for Stickers instead?
