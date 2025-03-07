@@ -16,13 +16,13 @@ const FavouritePage = () => {
       setFavoriteGifs(data)
     }
     fetchFavoriteGifs()
-  },[])
+  },[gf])
   
   return (
       <div className='mt-8'>
         <span className='font-[poppins] text-2xl sm:text-3xl font-bold text-gray-200'>My <span className='text-teal-400'>Favorites</span></span>
-      
-        {favoriteGifs.length > 0 ? (
+        
+        {favoriteGifs ? (
           <Suspense fallback={<Loader/>}>
           <div className='columns-2 md:columns-3 lg:columns-4 gap-2 mt-6'>
             {favoriteGifs.map((gif) => (
