@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { GifContext } from '../context/GifContext'
-import Gif from '../components/Gif';
+
+import Loader from '../components/Loader'             //our loader component
+const Gif = lazy(() => import("../components/Gif"));   //Lazy-load the Gif component
 
 const FavouritePage = () => {
   const{gf, favorites} = useContext(GifContext);
@@ -21,13 +23,13 @@ const FavouritePage = () => {
         <span className='font-[poppins] text-2xl sm:text-3xl font-bold text-gray-200'>My <span className='text-teal-400'>Favorites</span></span>
       
         {favoriteGifs.length > 0 ? (
+          <Suspense fallback={<Loader/>}>
           <div className='columns-2 md:columns-3 lg:columns-4 gap-2 mt-6'>
-            {
-              favoriteGifs.map((gif) => (
-                <Gif gif={gif} key={gif.id}/>
-              ))
-            }
-         </div> 
+            {favoriteGifs.map((gif) => (
+              <Gif gif={gif} key={gif.id}/>
+            ))}
+         </div>
+         </Suspense> 
         ) : (
           <div className='flex flex-col justify-center items-center gap-3 w-full mt-4'>
             <span className='font-extrabold text-lg sm:text-2xl '>No favourites</span>
