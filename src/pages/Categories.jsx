@@ -14,7 +14,7 @@ const Categories = () => {
   const fetchCategoryResults = async () =>{
     //here the gf.gifs i used to fetch data is diff from the 'gifs' we are using in GifContext.Provider
     const {data} = await gf.gifs(category, category)
-    console.log(data);
+    //console.log(data);
     setResults(data);
   }
   useEffect(() => {

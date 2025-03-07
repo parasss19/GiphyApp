@@ -3,7 +3,7 @@ import React, { lazy, Suspense, useContext, useEffect } from 'react'
 import { GifContext } from '../context/GifContext'
 import FilterGifs from '../components/FilterGifs'
 
-import Loading from '../components/Loader'             //our loader component
+import Loader from '../components/Loader';             //our loader component
 const Gif = lazy(() => import("../components/Gif"));   //Lazy-load the Gif component
 
 
@@ -34,7 +34,7 @@ const HomePage = () => {
       <FilterGifs showTrendingIcon ={true}/>
       
       {/* Gifs rendering */}
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <div className='columns-2 md:columns-3 lg:columns-4 gap-2'>
           {/*we are mapping each gif from gifs(state of array) and passing each gif to Gif comp as a prop */}
           {gifs.map((gif) => (
