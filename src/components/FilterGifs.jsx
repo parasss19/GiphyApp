@@ -42,7 +42,7 @@ const FilterGifs = ({alignLeft = false, showTrendingIcon = false}) => {
             <span 
               onClick={() => setFilter(f.value)}
               key={f.title}
-              className={`${filter === f.value ? f.background : "" } font-semibold px-4 py-2 w-1/3 rounded-full text-center cursor-pointer`}
+              className={`${filter === f.value ? f.background : "" } font-semibold px-4 py-2 flex-1 rounded-full text-center cursor-pointer`}
             >
              {f.title}
             </span>
