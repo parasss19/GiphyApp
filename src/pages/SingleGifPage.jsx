@@ -1,10 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GifContext } from '../context/GifContext';
-import Gif from '../components/Gif';
+
+import Loader from '../components/Loader';             //our loader component
+const Gif = lazy(() => import("../components/Gif"));   //Lazy-load the Gif component
+
 import FollowOn from '../components/FollowOn';
 import { HiChevronDown, HiChevronUp, HiOutlineExternalLink } from 'react-icons/hi';
 import FavDownShare from '../components/FavDownShare';
+
 
 const Type = ['gif', 'sticker', 'text'];
 
@@ -43,7 +47,7 @@ const SingleGifPage = () => {
     
     fetchSingleGif()
     fetchRelatedGif()
-  },[slug])  //whenever user click on related gifs then slug changed and we want to show that related gif so we re-render whenever slug changed in url
+  },[gf,slug])  //whenever user click on related gifs then slug changed and we want to show that related gif so we re-render whenever slug changed in url
 
 
   return (
@@ -130,6 +134,7 @@ const SingleGifPage = () => {
           <div className='w-full sm:w-3/4'>
             <div className='font-bold font-[poppins] text-gray-200 truncate mb-4'>{singleGif.title}</div>
             <Gif gif={singleGif}/>
+            
           
             {/*Mobile UI - for screen size < sm */}
             <div className='flex flex-col sm:hidden'>
@@ -171,14 +176,18 @@ const SingleGifPage = () => {
        
         {/* related gifs */}
         <span className='font-bold text-3xl font-[poppins]'>Related Gifs❤️</span>
-        <div className='mt-5 columns-2 md:columns-3 gap-2'>
-          {relatedGifs.length > 0 ? (
+        
+        <Suspense fallback={<Loader/>}>
+          <div className='mt-5 columns-2 md:columns-3 gap-2'>
+           {relatedGifs.length > 0 ? (
             relatedGifs.slice(1).map((gif) => (
               <Gif gif={gif} key={gif.id}/>
             ))
-            ) : (<p>No related Gifs found</p>)
-          }
-        </div>
+            ) : (
+             <p>No related Gifs found</p>
+            )}
+          </div>
+        </Suspense>
          
       </div>
 
