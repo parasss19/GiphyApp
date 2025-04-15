@@ -19,6 +19,17 @@
 
 <br>
 
+## A fun & fast GIF ,Stickers finder where you can:
+ 
+## 🚀 Features
+- 🔍 **Search trending GIFs, stickers & text**
+- 💾 **Save your favorites**
+- 📤 **Share with friends**
+- 📥 **Download GIFs**
+
+
+<br>
+
 
 # Installation
 
