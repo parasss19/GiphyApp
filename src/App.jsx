@@ -13,6 +13,7 @@ const Categories = lazy(() => import("./pages/Categories"));
 
 import {GifProvider} from './context/GifContext'
 import Loader from './components/Loader';
+import { Toaster } from 'react-hot-toast';
 
 
 //new way of writing routes (diff than we learn in codevolution)
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
+    <Toaster position="top-center" reverseOrder={false} />
     <GifProvider>
       <RouterProvider router={router}/>
     </GifProvider>

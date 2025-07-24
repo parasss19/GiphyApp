@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { HiHeart } from "react-icons/hi";
 import { ImEmbed2 } from "react-icons/im";
 import { GifContext } from "../context/GifContext";
 import { useParams } from "react-router-dom";
 import { IoMdCopy } from "react-icons/io";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-hot-toast"
+
 
 const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
   const { favorites, addToFavorites } = useContext(GifContext);
@@ -12,6 +13,16 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
   const [copyURl, setCopyURl] = useState("");
   const [urlColor, setUrlColor] = useState(false);
+
+  //favourite handler
+  const favourite = () => {
+    addToFavorites(singleGif.id);
+    toast.success(
+      favorites.includes(singleGif.id)
+      ? "Removed from Favorites"
+      : "Added to Favorites"
+    )
+  }
 
   //Copy to clipboard
   const CopyToBoard = async () => {
@@ -22,16 +33,7 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
     setCopyURl(text);
     setUrlColor(true);
 
-    const notify = () => {
-      const shortUrl = text.slice(0,30);
-      toast("Copy To Clipboard", {
-        position: "top-right",
-        autoClose: 5000,
-        draggable: true,
-        theme: "dark",
-      });
-    };
-    notify(); //Call notify after copying the text to clipboard
+    toast.success("Link Copied!");
 
     //Reset setCopyURl to false after 3 seconds so that blue color will be removed
     setTimeout(() => {
@@ -71,6 +73,8 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
       // Release the blob URL
       URL.revokeObjectURL(blobUrl);
+
+      toast.success("Gif Downloaded");
     } catch (error) {
       console.error("Download failed:", error);
     }
@@ -78,12 +82,9 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
   return (
     <div className={`${flexprop}`}>
-      {/* To show msg when copy link btn is clicked */}
-      <ToastContainer/>
-
       {/* fav btn */}
       <button
-        onClick={() => addToFavorites(singleGif.id)}
+        onClick={() => favourite()}
         className={`flex ${gap} ${textsize} items-center cursor-pointer text-gray-500 hover:text-gray-200`}
       >
         <HiHeart
