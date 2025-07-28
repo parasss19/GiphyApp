@@ -33,22 +33,22 @@ const SearchBarGifs = () => {
         placeholder="Search all the Gifs and Stickers"
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && searching()}
-        className="w-full py-4 pl-3 text-xl rounded-bl rounded-tl border border-l border-gray-300 outline-none"
+        className="w-full py-4 pl-3 text-[13px] sm:text-xl rounded-bl rounded-tl border border-l border-gray-300 outline-none"
       />
 
       {/* Cross icon remove query */}
       {query && ( 
         <button 
           onClick={() => setQuery("")}
-          className="absolute right-20 top-5 cursor-pointer opacity-50"
+          className="absolute right-20 top-4 cursor-pointer opacity-50"
         >
           <AiOutlineCloseCircle size={25}/>
         </button>
        )}
 
       {/* Search Btn */}
-      <button onClick={searching}  className="bg-teal-200 px-4 py-2 rounded-tr rounded-br cursor-pointer" >
-        <FcSearch size={35} className="-scale-x-100" />
+      <button onClick={searching}  className="bg-teal-200 px-2 py-1 sm:px-4 sm:py-2 rounded-tr rounded-br cursor-pointer" >
+        <FcSearch className="-scale-x-100 size-6 sm:size-8" />
       </button>
     </div>
 
