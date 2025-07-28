@@ -32,12 +32,12 @@ const FilterGifs = ({alignLeft = false, showTrendingIcon = false}) => {
       {showTrendingIcon && (
         <div className='flex gap-2 items-center'>
             <HiMiniArrowTrendingUp  size={25} className='text-teal-400'/>
-            <span className='font-semibold text-gray-300 text-[20px]'>Trending</span>
+            <span className='font-semibold text-gray-300 text-lg sm:text-[20px]'>Trending</span>
         </div>
        )}
       
       {/* Filter */}
-      <div className='flex gap-2 rounded-full bg-gray-800'>
+      <div className='flex gap-2 rounded-full bg-gray-800 text-[13px] sm:text-sm md:text-[17px]'>
         {filters.map((f) =>(
             <span 
               onClick={() => setFilter(f.value)}
