@@ -6,9 +6,9 @@ import Footer from '../components/Footer'
 
 const AppLayout = () => {
   return (
-    <div className='bg-gray-950 text-white min-h-screen'>
+    <div className='text-white min-h-screen'>
       {/* our app container */}
-      <div className='lg:max-w-5xl px-6 py-4 mx-auto'>
+      <div className='lg:max-w-5xl px-5 py-4 mx-auto'>
         <Header/>
         
         <main>
