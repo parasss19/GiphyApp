@@ -1,14 +1,29 @@
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
-// import { useNavigate } from 'react-router-dom';
 import search1 from '../assets/search1.gif'
 import save from '../assets/save.gif'
 import share from '../assets/share.gif'
 import download from '../assets/download.gif'
 import backgroundImage from '../assets/background.png'
+import { useContext, useState } from 'react';
+import PopUpModel from './PopUpModel';
+import { GifContext } from '../context/GifContext';
 
 const Landing = () => {
-  //const navigate = useNavigate();
+
+  const {backendURL} = useContext(GifContext)
+  const [isOpen, setIsOpen] = useState(false);
+    
+  const openPopUp = () => {
+    setIsOpen(true);
+  }
+  const closePopUp = () => {
+    setIsOpen(false);
+  }
+
+  const handleGoogleLogin = () => {
+    window.open(`${backendURL}/api/auth/googleAuth`, "_self");
+  }
 
   return (
   <>
@@ -53,10 +68,16 @@ const Landing = () => {
         transition={{ duration: 1, delay: 0.6 }}
       >
         <button 
-          // onClick={() => navigate('/')} 
+          onClick={openPopUp} 
           className="cursor-pointer bg-yellow-500 text-black font-semibold text-[15px] px-[24px] py-[10px] rounded-[12px] mt-8 shadow-lg active:scale-95 transition-transform duration-150">
             Get started for free
         </button>
+
+        <PopUpModel
+          isOpen={isOpen}
+          onClose={closePopUp}
+          handleGoogleLogin={handleGoogleLogin}
+        />
       </motion.button>
     </section>
 
