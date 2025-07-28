@@ -1,10 +1,19 @@
 import { CgClose } from 'react-icons/cg';
 import backgroundImage from '../assets/background.png'
 import { FcGoogle } from 'react-icons/fc';
+import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
+    const [loading, setLoading] = useState(false);
 
     if(!isOpen) return null;
+
+    const handleClick = async () => {
+      setLoading(true);
+      await handleGoogleLogin(); 
+      setLoading(false);
+    };
 
     return (
         <div className='flex gap-2 items-center text-md font-bold'>
@@ -22,11 +31,21 @@ const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
 
                 {/* Google Button */}
                 <button
-                  onClick={handleGoogleLogin}
-                  className="flex items-center justify-center  sm:w-xs mx-auto gap-2 sm:gap-3 px-4 py-2 border rounded-lg bg-black hover:bg-black/80 cursor-pointer"
+                  onClick={handleClick}
+                  disabled={loading}
+                  className="flex items-center justify-center sm:w-xs mx-auto gap-2 sm:gap-3 px-4 py-2 border rounded-lg bg-black hover:bg-black/80 cursor-pointer"
                 >
-                  <FcGoogle className="text-xl sm:text-2xl" />
-                  <span className='text-xs sm:lg'>Continue with Google</span>
+                  {loading 
+                    ? (
+                      <ClipLoader size={20} color="#fff" />
+                    )
+                    : (
+                      <>
+                        <FcGoogle className="text-xl sm:text-2xl" />
+                        <span className='text-xs sm:lg'>Continue with Google</span>
+                      </>
+                    )
+                  }
                 </button>
                 </div>
             </div>              
