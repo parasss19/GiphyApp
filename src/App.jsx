@@ -14,6 +14,9 @@ const Categories = lazy(() => import("./pages/Categories"));
 import {GifProvider} from './context/GifContext'
 import Loader from './components/Loader';
 import { Toaster } from 'react-hot-toast';
+import Landing from './components/Landing';
+import PublicRoutes from './components/PublicRoutes';
+import ProtectedRoutes from './components/ProtectedRoutes';
 
 
 //new way of writing routes (diff than we learn in codevolution)
@@ -26,27 +29,54 @@ const router = createBrowserRouter([
     children: [
       {
        path: '/',
-       element:  <HomePage/>
+        element: (
+          <ProtectedRoutes>
+            <HomePage />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: '/:category',
         element: (
-        <Suspense fallback={<Loader/>}>
-          <Categories/>
-        </Suspense>
+          <ProtectedRoutes>
+            <Suspense fallback={<Loader />}>
+              <Categories />
+            </Suspense>
+          </ProtectedRoutes>
+
         )
       },
       {
         path: '/search/:query',
-        element: <SearchPage/>
+        element: (
+          <ProtectedRoutes>
+            <SearchPage/>
+          </ProtectedRoutes>
+        )
       },
       {
         path: '/:type/:slug',
-        element: <SingleGifPage/>
+        element:( 
+          <ProtectedRoutes>
+            <SingleGifPage/>
+          </ProtectedRoutes>
+        )
       },
       {
         path: '/favorite',
-        element:<FavouritePage/>
+        element:(
+          <ProtectedRoutes>
+            <FavouritePage/>
+          </ProtectedRoutes>
+          )
+      },
+      {
+        path: '/landing',
+        element: (
+          <PublicRoutes>
+            <Landing />
+          </PublicRoutes>
+        )
       }
    ]
   }
