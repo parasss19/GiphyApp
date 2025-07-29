@@ -32,14 +32,18 @@ const GifProvider = ({children}) => {
       } 
     } 
 
-
-    //favourite arry contain ids of gif/sticker/text
-    //fetch all favorites id from local storage
+    //fetch user when component mount
     useEffect(() =>{
       getUser();
-      const favorites = JSON.parse(localStorage.getItem("favGifs")) || []
-      setFavorites(favorites)
     },[])
+
+    //fetch all favorites id from local storage only when user is authenticated
+    useEffect(() => {
+      if (user) {
+        const favsFromStorage = JSON.parse(localStorage.getItem("favGifs")) || []   //favourite arry contain ids of gif/sticker/text
+        setFavorites(favsFromStorage)
+      }
+    }, [user]) // run when user is updated
 
     const addToFavorites = (id) =>{
       console.log(id);
