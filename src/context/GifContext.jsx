@@ -12,7 +12,7 @@ const GifProvider = ({children}) => {
     const [gifs, setGifs] = useState([])           //gifs state contains all the gifs
     const [filter, setFilter] = useState('gifs')   //filter state used to track on which filter we are either gifs, sticker,text
     const [favorites, setFavorites] = useState([])  //favourites state contains all fav gifs
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(null);
     const [loadingUser, setLoadingUser] = useState(true);
 
 

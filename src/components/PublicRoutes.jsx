@@ -4,7 +4,10 @@ import { Navigate } from "react-router-dom";
 
 
 const PublicRoutes = ({children}) => {
-  const {user} = useContext(GifContext);
+  const {user, loadingUser} = useContext(GifContext);
+
+  if (loadingUser) return <Loader />;
+  
   if (user) {
     return <Navigate to="/" replace />;
   }
