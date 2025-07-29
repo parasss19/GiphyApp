@@ -1,18 +1,18 @@
 import { CgClose } from 'react-icons/cg';
 import backgroundImage from '../assets/background.png'
 import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { GifContext } from '../context/GifContext';
 import { ClipLoader } from 'react-spinners';
 
 const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
-    const [loading, setLoading] = useState(false);
+    const {loading, setLoading} = useContext(GifContext);
 
     if(!isOpen) return null;
 
     const handleClick = async () => {
       setLoading(true);
       await handleGoogleLogin(); 
-      setLoading(false);
     };
 
     return (
@@ -37,7 +37,7 @@ const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
                 >
                   {loading 
                     ? (
-                      <ClipLoader size={20} color="#fff" />
+                      <ClipLoader size={20} color='#fff'/>
                     )
                     : (
                       <>

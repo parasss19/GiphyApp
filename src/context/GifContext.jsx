@@ -13,6 +13,7 @@ const GifProvider = ({children}) => {
     const [filter, setFilter] = useState('gifs')   //filter state used to track on which filter we are either gifs, sticker,text
     const [favorites, setFavorites] = useState([])  //favourites state contains all fav gifs
     const [user, setUser] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const gf = new GiphyFetch(import.meta.env.VITE_GIPHY_KEY)  
     const backendURL = import.meta.env.VITE_BACKEND_URL
@@ -61,7 +62,7 @@ const GifProvider = ({children}) => {
 
     return(
      <>
-     <GifContext.Provider value={{gf, gifs, setGifs, filter, setFilter, favorites, addToFavorites, user, setUser, backendURL}}>     {/* The inner braces define that object with key value like gf:gf, gifs:gifs, etc., using the ES6 shorthand for object properties. */}
+     <GifContext.Provider value={{gf, gifs, setGifs, filter, setFilter, favorites, addToFavorites, user, setUser, backendURL, loading, setLoading}}>     {/* The inner braces define that object with key value like gf:gf, gifs:gifs, etc., using the ES6 shorthand for object properties. */}
         {children} 
      </GifContext.Provider>
      </>
