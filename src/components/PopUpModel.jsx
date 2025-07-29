@@ -1,12 +1,11 @@
 import { CgClose } from 'react-icons/cg';
 import backgroundImage from '../assets/background.png'
 import { FcGoogle } from 'react-icons/fc';
-import { useContext, useState } from 'react';
-import { GifContext } from '../context/GifContext';
+import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 
 const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
-    const {loading, setLoading} = useContext(GifContext);
+    const [loading, setLoading] = useState(false);
 
     if(!isOpen) return null;
 
