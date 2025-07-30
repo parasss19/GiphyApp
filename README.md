@@ -4,20 +4,6 @@
 </div>
 <br>
 
-<h1>Technology Stack<h1>
-
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Context-API](https://img.shields.io/badge/Context--Api-000000?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-
-<br>
-
-
-> **Note**: If you are new to open source contributions, you can refer to [this](https://opensource.guide/how-to-contribute/) guide by GitHub.
-
-<br>
 
 ## A fun & fast GIF ,Stickers finder where you can:
  
@@ -27,7 +13,27 @@
 - 📤 **Share with friends**
 - 📥 **Download GIFs**
 
+<br>
 
+
+## 🧑‍💻 Tech Stack
+
+| Tech        | Description                           |
+|-------------|---------------------------------------|
+| **MongoDB** | NoSQL database with transaction support |
+| **Express** | Backend server framework               |
+| **React**   | Frontend library                       |
+| **Tailwind Css**   | For UI                        |
+| **Node.js** | Runtime environment                    |
+| **JWT**     | Secure authentication mechanism        |
+| **Mongoose**| MongoDB object modeling tool           |
+| **Vite**| Build Tool           |
+| **Context-API**| For state Management           |
+
+<br>
+
+
+> **Note**: If you are new to open source contributions, you can refer to [this](https://opensource.guide/how-to-contribute/) guide by GitHub.
 <br>
 
 
@@ -46,32 +52,41 @@
   
 2. **Clone the forked repository to your local machine:**
 
-```sh
-   git clone https://github.com/parasss19/GiphyApp.git
+   ```sh
+   git clone https://github.com/parasss19/GiphyApp
    cd GiphyApp
    ```
  
-  - This command will create a local copy of the project on your machine.
+    - This command will create a local copy of the project on your machine.
 
-3. **Install dependencies**
+  3. **Install frontend dependencies**
 
-  ```sh
-   npm install
-   ```
-
-
-4. **Set up environment variables**
-   - Create a `.env` file in the root directory
-   - Add your Giphy API key:
+     ```sh
+     npm install
      ```
-     VITE_GIPHY_API_KEY=your_api_key_here
+   
+  4. **Setup ENV for Backend**
+     Create a `config.env` file in the `Backend` directory
+     ```sh
+     VITE_GIPHY_KEY = "YOUR GIPHY API KEY"
+     VITE_BACKEND_URL = "YOUR backend url"
+     VITE_GOOGLE_CLIENT_ID = "YOUR GOOGLE CLIENT ID FOR OAuth"
      ```
-5. **Running the Project :**
-```
-npm run dev
-```
-6 **Open the app**
-   - Go to `http://localhost:5173` in your browser
+
+  5. **Running Frontend**
+
+     ```sh
+     npm run dev
+     ```
+
+  6. **Open the app**
+    - Go to `http://localhost:5173` in your browser
+
+
+<br>
+
+> **Note**: For backend Repository Refer to [Giphy_Backend](https://github.com/parasss19/GiphyApp_Backend) .
+<br>
 
 ## 📜 License
 This project is licensed under the MIT License.
