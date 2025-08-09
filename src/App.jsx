@@ -11,7 +11,7 @@ import SingleGifPage from './pages/SingleGifPage';
 // Lazy-loaded components
 const Categories = lazy(() => import("./pages/Categories"));
 
-import {GifProvider} from './context/GifContext'
+import {GifProvider} from './context/GifContext';
 import Loader from './components/Loader';
 import { Toaster } from 'react-hot-toast';
 import Landing from './components/Landing';
