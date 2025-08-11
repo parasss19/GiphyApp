@@ -18,6 +18,8 @@ import Landing from './components/Landing';
 import PublicRoutes from './components/PublicRoutes';
 import ProtectedRoutes from './components/ProtectedRoutes';
 
+import { Analytics } from "@vercel/analytics/react";
+
 
 //new way of writing routes (diff than we learn in codevolution)
 const router = createBrowserRouter([
@@ -88,6 +90,7 @@ const App = () => {
     <Toaster position="top-center" reverseOrder={false} />
     <GifProvider>
       <RouterProvider router={router}/>
+      <Analytics />
     </GifProvider>
     </>
   ) 
