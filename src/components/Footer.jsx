@@ -20,7 +20,7 @@ const Footer = () => {
             <h2 className="font-semibold text-sm sm:text-[18px]">Connect With Us</h2>
             <div className="flex items-center gap-3">
               <a
-                href="https://twitter.com/Parasss1902"
+                href="https://x.com/Paras_tsx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gray-800 p-2 rounded-full text-gray-700 hover:text-black transition-transform hover:-translate-y-1"
