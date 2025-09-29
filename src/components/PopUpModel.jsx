@@ -1,5 +1,4 @@
 import { CgClose } from 'react-icons/cg';
-import backgroundImage from '../assets/background.png'
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
@@ -13,6 +12,8 @@ const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
       setLoading(true);
       await handleGoogleLogin(); 
     };
+
+    const backgroundImage = "https://res.cloudinary.com/dxxeks4o5/image/upload/f_auto,q_auto,w_1920/background_tfdny8.png"
 
     return (
         <div className='flex gap-2 items-center text-md font-bold'>

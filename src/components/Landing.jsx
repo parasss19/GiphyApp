@@ -4,7 +4,6 @@ import search1 from '../assets/search1.gif'
 import save from '../assets/save.gif'
 import share from '../assets/share.gif'
 import download from '../assets/download.gif'
-import backgroundImage from '../assets/background.png'
 import { useContext, useState } from 'react';
 import PopUpModel from './PopUpModel';
 import { GifContext } from '../context/GifContext';
@@ -20,6 +19,8 @@ const Landing = () => {
   const closePopUp = () => {
     setIsOpen(false);
   }
+
+  const backgroundImage = "https://res.cloudinary.com/dxxeks4o5/image/upload/f_auto,q_auto,w_1920/background_tfdny8.png"
 
   const handleGoogleLogin = () => {
     window.open(`${backendURL}/api/auth/googleAuth`, "_self");
