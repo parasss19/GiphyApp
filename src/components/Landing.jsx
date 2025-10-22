@@ -39,14 +39,16 @@ const Landing = () => {
       >
       </div>
 
-      <div>
-        <a href="https://peerlist.io/paras19/project/stickyy" target="_blank" rel="noreferrer">
-				<img
-					src="https://peerlist.io/api/v1/projects/embed/PRJHR8D6N6DAMRLE81AP6K88N6GR9L?showUpvote=false&theme=dark"
-					alt="Stickyy"
-					// style="width: auto; height: 72px;"
-				/>
-			</a>
+      <div className='w-[220px] h-[80px]'>
+        <a 
+          href="https://peerlist.io/paras19/project/stickyy" 
+          target="_blank" rel="noreferrer"
+        >
+				  <img
+					  src="https://peerlist.io/api/v1/projects/embed/PRJHR8D6N6DAMRLE81AP6K88N6GR9L?showUpvote=true&theme=dark"
+					  alt="Stickyy"
+				  />
+			  </a>
       </div>
       
       {/* Heading */}
