@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { GifContext } from '../context/GifContext'
 import Pagination from '../components/Pagination'
 
+import Loader from '../components/Loader'
 import { GifGridSkeleton } from '../components/GifSkeleton'
 const Gif = lazy(() => import("../components/Gif"))
 
