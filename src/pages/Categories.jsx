@@ -3,23 +3,37 @@ import { GifContext } from '../context/GifContext';
 import { useParams } from 'react-router-dom';
 import Gif from '../components/Gif';
 import FollowOn from '../components/FollowOn';
+import LoadMore from '../components/LoadMore';
+
+const PAGE_SIZE = 20;
 
 const Categories = () => {
   const [results, setResults] = useState([]);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
 
-  const {gf} = useContext(GifContext);
+  const { gf } = useContext(GifContext);
+  const { category } = useParams();
 
-  const {category} = useParams();
+  const fetchCategoryResults = async () => {
+    const { data } = await gf.gifs(category, category);
+    setResults(data || []);
+    setDisplayCount(PAGE_SIZE);
+  };
 
-  const fetchCategoryResults = async () =>{
-    //here the gf.gifs i used to fetch data is diff from the 'gifs' we are using in GifContext.Provider
-    const {data} = await gf.gifs(category, category)
-    //console.log(data);
-    setResults(data);
-  }
   useEffect(() => {
+    setDisplayCount(PAGE_SIZE);
     fetchCategoryResults();
-  },[category])
+  }, [category]);
+
+  const displayedResults = results.slice(1, 1 + displayCount);
+  const hasMoreResults = results.length > 1 + displayCount;
+
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setDisplayCount((prev) => prev + PAGE_SIZE);
+    setLoadingMore(false);
+  };
 
 
   return (
@@ -57,11 +71,11 @@ const Categories = () => {
 
         {/* gifs rendering */}
         <div className='my-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
-          {/* we remove one gif that is rendering already on left side */}
-          {results.slice(1).map((gif) => (
-            <Gif key={gif.id} gif={gif}  />
+          {displayedResults.map((gif) => (
+            <Gif key={gif.id} gif={gif} />
           ))}
         </div>
+        <LoadMore onClick={handleLoadMore} loading={loadingMore} hasMore={hasMoreResults} />
       </div>
        
     </div>

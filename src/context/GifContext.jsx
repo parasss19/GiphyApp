@@ -29,7 +29,7 @@ const GifProvider = ({children}) => {
        } 
        catch (error) {
         setUser(null);
-        console.log(error.message);
+        if (import.meta.env.DEV) console.error(error.message);
       }
       finally {
         setLoadingUser(false);
@@ -49,23 +49,19 @@ const GifProvider = ({children}) => {
       }
     }, [user]) // run when user is updated
 
-    const addToFavorites = (id) =>{
-      console.log(id);
+    const addToFavorites = (id) => {
         //if given gif/sticker/text already present then we remove it from favorites array
-        if(favorites.includes(id)){
-          const updatedFav = favorites.filter((itemId) => {
-            return itemId !== id
-          })
-          localStorage.setItem("favGifs", JSON.stringify(updatedFav))
-          setFavorites(updatedFav)
+        if (favorites.includes(id)) {
+          const updatedFav = favorites.filter((itemId) => itemId !== id);
+          localStorage.setItem("favGifs", JSON.stringify(updatedFav));
+          setFavorites(updatedFav);
+          return false; // removed
         }
         //if fav arry does not include that id then push that id into fav array
-        else{
-          const updatedFav = [...favorites]
-          updatedFav.push(id)
-          localStorage.setItem("favGifs", JSON.stringify(updatedFav))
-          setFavorites(updatedFav)
-        }
+        const updatedFav = [...favorites, id];
+        localStorage.setItem("favGifs", JSON.stringify(updatedFav));
+        setFavorites(updatedFav);
+        return true; // added
     }
 
     return(

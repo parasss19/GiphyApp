@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { GifContext } from "../context/GifContext"
 import { Navigate } from "react-router-dom";
-import { Loader } from "lucide-react";
+import Loader from "./Loader";
 
 
 const PublicRoutes = ({children}) => {

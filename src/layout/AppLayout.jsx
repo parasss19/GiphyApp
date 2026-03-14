@@ -7,13 +7,15 @@ import Footer from '../components/Footer'
 const AppLayout = () => {
   return (
     <div className='text-white min-h-screen'>
-      {/* our app container */}
       <div className='lg:max-w-5xl px-5 py-4 mx-auto'>
-        <Header/>
-        
+        {/* Sticky header + search bar */}
+        <header className='sticky top-0 z-20 -mx-5 px-5 py-4 bg-[#0a0a0f]/95 backdrop-blur-sm'>
+          <Header/>
+        </header>
+
         <main>
-          <Outlet/>    
-        </main> 
+          <Outlet/>
+        </main>
 
         <Footer/>
       </div>

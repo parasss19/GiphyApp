@@ -6,7 +6,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { EllipsisVertical, HomeIcon, LogOut } from 'lucide-react';
 import PopUpModel from './PopUpModel';
-import logo from '../assets/logo.png'
 import { CgClose } from 'react-icons/cg';
 import { BsPerson } from 'react-icons/bs';
 
@@ -90,7 +89,7 @@ const Header = () => {
       <div className='relative flex gap-2 justify-between items-center mb-2'>
         {/* 1 Logo(left side) */}
         <Link to= '/' className='flex items-center gap-2'> 
-          <img src={logo} alt="giphy-logo" className='w-5 sm:w-8' />
+          <img src="/logo.svg" alt="giphy-logo" className='w-5 sm:w-8' />
           <h1 className='text-[18px] sm:text-[38px] font-extrabold curson-pointer'>STICKY</h1>
         </Link>
           

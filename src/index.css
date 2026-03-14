@@ -9,3 +9,13 @@
 .png-pattern {
     background-image: url('/bg.png');
 }
+
+/* Hide scrollbar on search dropdown; content remains scrollable */
+.search-dropdown-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.search-dropdown-scroll::-webkit-scrollbar {
+  display: none;
+}

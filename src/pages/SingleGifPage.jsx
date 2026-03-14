@@ -2,52 +2,67 @@ import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GifContext } from '../context/GifContext';
 
-import Loader from '../components/Loader';             //our loader component
-const Gif = lazy(() => import("../components/Gif"));   //Lazy-load the Gif component
+import Loader from '../components/Loader';
+import LoadMore from '../components/LoadMore';
+const Gif = lazy(() => import("../components/Gif"));
 
 import FollowOn from '../components/FollowOn';
 import { HiChevronDown, HiChevronUp, HiOutlineExternalLink } from 'react-icons/hi';
 import FavDownShare from '../components/FavDownShare';
 
-
 const Type = ['gif', 'sticker', 'text'];
+const RELATED_PAGE_SIZE = 15;
 
 const SingleGifPage = () => {
-  //when click on any content(gif,sticker,text), url look like: http://localhost:5173/type/slug
-  //we extract /:type/:slug using useParams() hook
-  //we want gif Id which is present at the last in slug 
+  const { gf } = useContext(GifContext);
+  const { type, slug } = useParams();
 
-  const {gf} = useContext(GifContext)
-  const {type, slug} = useParams()
+  const [singleGif, setSingleGif] = useState({});
+  const [relatedGifs, setRelatedGifs] = useState([]);
+  const [readMore, setReadMore] = useState(false);
+  const [relatedLoadingMore, setRelatedLoadingMore] = useState(false);
+  const [relatedHasMore, setRelatedHasMore] = useState(true);
 
-  const [singleGif, setSingleGif] = useState({})
-  const [relatedGifs, setRelatedGifs] = useState([])
-  const [readMore, setReadMore] = useState(false)
+  const gifId = slug?.split("-")?.[slug.split("-").length - 1];
 
   useEffect(() => {
-    if(!Type.includes(type)){
-      throw new Error("Invalid Content Type")
+    if (!Type.includes(type)) {
+      throw new Error("Invalid Content Type");
     }
     const fetchSingleGif = async () => {
-      //url look like : http://localhost:5173/gif/good-gm-gn-7HUhoMwO8Ul0t56QKx   here type = gif and slug = good-gm-gn-7HUhoMwO8Ul0t56QKx
-      const typeId = slug.split("-");         //typeId: ['good', 'gm', 'gn', '7HUhoMwO8Ul0t56QKx']
-      //console.log(typeId)   
-      const {data} = await gf.gif(typeId[typeId.length-1])   //gf.gif(7HUhoMwO8Ul0t56QKx)
-      //console.log(data)
-      setSingleGif(data)
-    }  
+      const { data } = await gf.gif(gifId);
+      setSingleGif(data);
+    };
 
-    const fetchRelatedGif = async () => {
-      const relatedTypeId = slug.split("-");        
-      const {data: related} = await gf.related(relatedTypeId[relatedTypeId.length-1], {
-        limit: 15,
-      })  
-      setRelatedGifs(related)
-    } 
-    
-    fetchSingleGif()
-    fetchRelatedGif()
-  },[gf,slug])  //whenever user click on related gifs then slug changed and we want to show that related gif so we re-render whenever slug changed in url
+    const fetchRelatedGif = async (offset = 0, append = false) => {
+      const { data: related } = await gf.related(gifId, {
+        limit: RELATED_PAGE_SIZE,
+        offset,
+      });
+      const list = related || [];
+      if (append) {
+        setRelatedGifs((prev) => [...prev, ...list]);
+      } else {
+        setRelatedGifs(list);
+      }
+      setRelatedHasMore(list.length === RELATED_PAGE_SIZE);
+    };
+
+    fetchSingleGif();
+    fetchRelatedGif(0, false);
+  }, [gf, slug, type, gifId]);
+
+  const handleLoadMoreRelated = async () => {
+    setRelatedLoadingMore(true);
+    const { data: related } = await gf.related(gifId, {
+      limit: RELATED_PAGE_SIZE,
+      offset: relatedGifs.length,
+    });
+    const list = related || [];
+    setRelatedGifs((prev) => [...prev, ...list]);
+    setRelatedHasMore(list.length === RELATED_PAGE_SIZE);
+    setRelatedLoadingMore(false);
+  };
 
 
   return (
@@ -115,7 +130,7 @@ const SingleGifPage = () => {
             <span className='text-gray-400'>Source</span>
             <div className='flex items-center text-sm gap-1 font-bold'>
               <HiOutlineExternalLink size={25}/>
-              <a href={singleGif.source} target='blank' className='truncate'> {singleGif.source} </a>
+              <a href={singleGif.source} target="_blank" rel="noopener noreferrer" className='truncate'> {singleGif.source} </a>
             </div>
            </div>
           ) : (
@@ -176,17 +191,20 @@ const SingleGifPage = () => {
        
         {/* related gifs */}
         <span className='font-bold text-3xl font-[poppins]'>Related Gifs❤️</span>
-        
-        <Suspense fallback={<Loader/>}>
+
+        <Suspense fallback={<Loader />}>
           <div className='mt-5 columns-2 md:columns-3 gap-2'>
-           {relatedGifs.length > 0 ? (
-            relatedGifs.slice(1).map((gif) => (
-              <Gif gif={gif} key={gif.id}/>
-            ))
+            {relatedGifs.length > 0 ? (
+              relatedGifs.map((gif) => <Gif gif={gif} key={gif.id} />)
             ) : (
-             <p>No related Gifs found</p>
+              <p>No related Gifs found</p>
             )}
           </div>
+          <LoadMore
+            onClick={handleLoadMoreRelated}
+            loading={relatedLoadingMore}
+            hasMore={relatedHasMore}
+          />
         </Suspense>
          
       </div>

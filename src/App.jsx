@@ -38,39 +38,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/:category',
-        element: (
-          <ProtectedRoutes>
-            <Suspense fallback={<Loader />}>
-              <Categories />
-            </Suspense>
-          </ProtectedRoutes>
-
-        )
-      },
-      {
-        path: '/search/:query',
-        element: (
-          <ProtectedRoutes>
-            <SearchPage/>
-          </ProtectedRoutes>
-        )
-      },
-      {
-        path: '/:type/:slug',
-        element:( 
-          <ProtectedRoutes>
-            <SingleGifPage/>
-          </ProtectedRoutes>
-        )
-      },
-      {
         path: '/favorite',
-        element:(
+        element: (
           <ProtectedRoutes>
             <FavouritePage/>
           </ProtectedRoutes>
-          )
+        ),
       },
       {
         path: '/landing',
@@ -78,7 +51,33 @@ const router = createBrowserRouter([
           <PublicRoutes>
             <Landing />
           </PublicRoutes>
-        )
+        ),
+      },
+      {
+        path: '/search/:query',
+        element: (
+          <ProtectedRoutes>
+            <SearchPage/>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: '/:type/:slug',
+        element: (
+          <ProtectedRoutes>
+            <SingleGifPage/>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: '/:category',
+        element: (
+          <ProtectedRoutes>
+            <Suspense fallback={<Loader />}>
+              <Categories />
+            </Suspense>
+          </ProtectedRoutes>
+        ),
       }
    ]
   }

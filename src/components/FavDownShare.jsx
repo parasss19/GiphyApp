@@ -16,12 +16,8 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
   //favourite handler
   const favourite = () => {
-    addToFavorites(singleGif.id);
-    toast.success(
-      favorites.includes(singleGif.id)
-      ? "Removed from Favorites"
-      : "Added to Favorites"
-    )
+    const added = addToFavorites(singleGif.id);
+    toast.success(added ? "Added to Favorites" : "Removed from Favorites");
   }
 
   //Copy to clipboard
@@ -43,14 +39,10 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
   //Download logic
   const Download = async () => {
-    const url = singleGif?.url;
-    if (!url) return;
-    console.log(url);
+    if (!singleGif?.url || !slug) return;
 
     const gifurl = slug.split("-");
-    console.log(gifurl);
     const gifid = gifurl[gifurl.length - 1];
-    console.log(gifid);
     const directGifUrl = `https://media.giphy.com/media/${gifid}/giphy.gif`;
 
     try {
