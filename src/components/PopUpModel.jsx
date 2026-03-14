@@ -1,56 +1,59 @@
-import { CgClose } from 'react-icons/cg';
-import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react';
-import { ClipLoader } from 'react-spinners';
+import { createPortal } from "react-dom";
+import { CgClose } from "react-icons/cg";
+import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 
-const PopUpModel = ({isOpen, onClose, handleGoogleLogin}) => {
-    const [loading, setLoading] = useState(false);
+const PopUpModel = ({ isOpen, onClose, handleGoogleLogin }) => {
+  const [loading, setLoading] = useState(false);
 
-    if(!isOpen) return null;
+  if (!isOpen) return null;
 
-    const handleClick = async () => {
-      setLoading(true);
-      await handleGoogleLogin(); 
-    };
+  const handleClick = async () => {
+    setLoading(true);
+    await handleGoogleLogin();
+  };
 
-    const backgroundImage = "https://res.cloudinary.com/dxxeks4o5/image/upload/f_auto,q_auto,w_1920/background_tfdny8.png"
+  const backgroundImage =
+    "https://res.cloudinary.com/dxxeks4o5/image/upload/f_auto,q_auto,w_1920/background_tfdny8.png";
 
-    return (
-        <div className='flex gap-2 items-center text-md font-bold'>
-            <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50">
-                <div className="rounded-xl p-8 w-[250px] h-[180px] sm:w-[450px] sm:h-[200px] relative bg-center bg-cover bg-no-repeat" style={{backgroundImage: `url(${backgroundImage})`}}>
-                {/* Close button */}
-                <button
-                  onClick={onClose}
-                  className="absolute top-2 right-3 text-black bg-red-500 rounded-full p-2 cursor-pointer"
-                >
-                  <CgClose className='w-3 h-3 sm:w-5 sm:h-5'/>
-                </button>
-                
-                <h2 className="mb-10 text-lg sm:text-2xl text-center text-yellow-300 font-bold font-[outfit] backdrop-blur-lg w-fit mx-auto px-4 py-0.5 rounded-lg">Sign In</h2>
+  const modalContent = (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+      <div
+        className="relative rounded-xl p-8 w-[250px] h-[180px] sm:w-[450px] sm:h-[200px] bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-3 rounded-full bg-red-500 p-2 cursor-pointer"
+          aria-label="Close"
+        >
+          <CgClose className="w-3 h-3 sm:w-5 sm:h-5" />
+        </button>
 
-                {/* Google Button */}
-                <button
-                  onClick={handleClick}
-                  disabled={loading}
-                  className="flex items-center justify-center sm:w-xs mx-auto gap-2 sm:gap-3 px-4 py-2 border rounded-lg bg-black hover:bg-black/80 cursor-pointer"
-                >
-                  {loading 
-                    ? (
-                      <ClipLoader size={20} color='#fff'/>
-                    )
-                    : (
-                      <>
-                        <FcGoogle className="text-xl sm:text-2xl" />
-                        <span className='text-xs sm:lg'>Continue with Google</span>
-                      </>
-                    )
-                  }
-                </button>
-                </div>
-            </div>              
-        </div>
-    )
-}
+        <h2 className="mb-10 text-lg sm:text-2xl text-center text-yellow-300 font-bold font-[outfit] backdrop-blur-lg w-fit mx-auto px-4 py-0.5 rounded-lg">
+          Sign In
+        </h2>
+
+        <button
+          onClick={handleClick}
+          disabled={loading}
+          className="flex items-center justify-center sm:w-xs mx-auto gap-2 sm:gap-3 px-4 py-2 border rounded-lg bg-black text-white hover:bg-black/80 cursor-pointer"
+        >
+          {loading ? (
+            <ClipLoader size={20} color="#fff" />
+          ) : (
+            <>
+              <FcGoogle className="text-xl sm:text-2xl" />
+              <span className="text-xs sm:lg">Continue with Google</span>
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+
+  return createPortal(modalContent, document.body);
+};
 
 export default PopUpModel

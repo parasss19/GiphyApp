@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { GifContext } from '../context/GifContext'
-import LoadMore from '../components/LoadMore'
+import Pagination from '../components/Pagination'
 
 import Loader from '../components/Loader'
 const Gif = lazy(() => import("../components/Gif"))
@@ -10,37 +10,46 @@ const PAGE_SIZE = 20
 const FavouritePage = () => {
   const { gf, favorites } = useContext(GifContext);
   const [favoriteGifs, setFavoriteGifs] = useState([]);
-  const [displayedCount, setDisplayedCount] = useState(PAGE_SIZE);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const totalPages = Math.max(1, Math.ceil(favorites.length / PAGE_SIZE));
 
   useEffect(() => {
     if (favorites.length === 0) {
       setFavoriteGifs([]);
-      setDisplayedCount(PAGE_SIZE);
+      setCurrentPage(1);
       return;
     }
-    const idsToFetch = favorites.slice(0, PAGE_SIZE);
+    setCurrentPage(1);
+  }, [favorites.length]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages >= 1) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
+
+  useEffect(() => {
+    if (favorites.length === 0) {
+      setFavoriteGifs([]);
+      return;
+    }
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, favorites.length);
+    const idsToFetch = favorites.slice(start, end);
     if (idsToFetch.length === 0) return;
+    setLoading(true);
     const fetchFavoriteGifs = async () => {
       const { data } = await gf.gifs(idsToFetch);
       setFavoriteGifs(data || []);
+      setLoading(false);
     };
     fetchFavoriteGifs();
-    setDisplayedCount(PAGE_SIZE);
-  }, [gf, favorites]);
+  }, [gf, favorites, currentPage]);
 
-  const hasMore = favorites.length > displayedCount;
-
-  const handleLoadMore = async () => {
-    const start = displayedCount;
-    const end = Math.min(start + PAGE_SIZE, favorites.length);
-    const idsSlice = favorites.slice(start, end);
-    if (idsSlice.length === 0) return;
-    setLoadingMore(true);
-    const { data } = await gf.gifs(idsSlice);
-    setFavoriteGifs((prev) => [...prev, ...(data || [])]);
-    setDisplayedCount(end);
-    setLoadingMore(false);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -49,14 +58,25 @@ const FavouritePage = () => {
         My <span className='text-teal-400'>Favorites</span>
       </span>
 
-      {favoriteGifs.length > 0 ? (
+      {favoriteGifs.length > 0 || (favorites.length > 0 && loading) ? (
         <Suspense fallback={<Loader />}>
-          <div className='columns-2 md:columns-3 lg:columns-4 gap-2 mt-6'>
-            {favoriteGifs.map((gif) => (
-              <Gif gif={gif} key={gif.id} showRemoveFromFavorites />
-            ))}
-          </div>
-          <LoadMore onClick={handleLoadMore} loading={loadingMore} hasMore={hasMore} />
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-6'>
+                {favoriteGifs.map((gif) => (
+                  <Gif gif={gif} key={gif.id} showRemoveFromFavorites />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                loading={loading}
+              />
+            </>
+          )}
         </Suspense>
       ) : (
         <div className='flex flex-col justify-center items-center gap-3 w-3xs sm:w-xs mx-auto mt-4'>

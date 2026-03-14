@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { GifContext } from '../context/GifContext';
 
 import Loader from '../components/Loader';
-import LoadMore from '../components/LoadMore';
+import Pagination from '../components/Pagination';
 const Gif = lazy(() => import("../components/Gif"));
 
 import FollowOn from '../components/FollowOn';
@@ -12,6 +12,7 @@ import FavDownShare from '../components/FavDownShare';
 
 const Type = ['gif', 'sticker', 'text'];
 const RELATED_PAGE_SIZE = 15;
+const DEFAULT_RELATED_TOTAL_PAGES = 10;
 
 const SingleGifPage = () => {
   const { gf } = useContext(GifContext);
@@ -20,8 +21,9 @@ const SingleGifPage = () => {
   const [singleGif, setSingleGif] = useState({});
   const [relatedGifs, setRelatedGifs] = useState([]);
   const [readMore, setReadMore] = useState(false);
-  const [relatedLoadingMore, setRelatedLoadingMore] = useState(false);
-  const [relatedHasMore, setRelatedHasMore] = useState(true);
+  const [relatedPage, setRelatedPage] = useState(1);
+  const [relatedTotalPages, setRelatedTotalPages] = useState(DEFAULT_RELATED_TOTAL_PAGES);
+  const [relatedLoading, setRelatedLoading] = useState(false);
 
   const gifId = slug?.split("-")?.[slug.split("-").length - 1];
 
@@ -33,35 +35,33 @@ const SingleGifPage = () => {
       const { data } = await gf.gif(gifId);
       setSingleGif(data);
     };
+    fetchSingleGif();
+    setRelatedPage(1);
+    setRelatedTotalPages(DEFAULT_RELATED_TOTAL_PAGES);
+  }, [gf, slug, type, gifId]);
 
-    const fetchRelatedGif = async (offset = 0, append = false) => {
+  useEffect(() => {
+    const fetchRelatedGif = async () => {
+      setRelatedLoading(true);
+      const offset = (relatedPage - 1) * RELATED_PAGE_SIZE;
       const { data: related } = await gf.related(gifId, {
         limit: RELATED_PAGE_SIZE,
         offset,
       });
       const list = related || [];
-      if (append) {
-        setRelatedGifs((prev) => [...prev, ...list]);
+      setRelatedGifs(list);
+      if (list.length < RELATED_PAGE_SIZE) {
+        setRelatedTotalPages(relatedPage);
       } else {
-        setRelatedGifs(list);
+        setRelatedTotalPages((prev) => Math.max(prev, relatedPage + 1));
       }
-      setRelatedHasMore(list.length === RELATED_PAGE_SIZE);
+      setRelatedLoading(false);
     };
+    fetchRelatedGif();
+  }, [gf, gifId, relatedPage]);
 
-    fetchSingleGif();
-    fetchRelatedGif(0, false);
-  }, [gf, slug, type, gifId]);
-
-  const handleLoadMoreRelated = async () => {
-    setRelatedLoadingMore(true);
-    const { data: related } = await gf.related(gifId, {
-      limit: RELATED_PAGE_SIZE,
-      offset: relatedGifs.length,
-    });
-    const list = related || [];
-    setRelatedGifs((prev) => [...prev, ...list]);
-    setRelatedHasMore(list.length === RELATED_PAGE_SIZE);
-    setRelatedLoadingMore(false);
+  const handleRelatedPageChange = (page) => {
+    setRelatedPage(page);
   };
 
 
@@ -193,18 +193,25 @@ const SingleGifPage = () => {
         <span className='font-bold text-3xl font-[poppins]'>Related Gifs❤️</span>
 
         <Suspense fallback={<Loader />}>
-          <div className='mt-5 columns-2 md:columns-3 gap-2'>
-            {relatedGifs.length > 0 ? (
-              relatedGifs.map((gif) => <Gif gif={gif} key={gif.id} />)
-            ) : (
-              <p>No related Gifs found</p>
-            )}
-          </div>
-          <LoadMore
-            onClick={handleLoadMoreRelated}
-            loading={relatedLoadingMore}
-            hasMore={relatedHasMore}
-          />
+          {relatedLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <div className='mt-5 grid grid-cols-2 md:grid-cols-3 gap-2'>
+                {relatedGifs.length > 0 ? (
+                  relatedGifs.map((gif) => <Gif gif={gif} key={gif.id} />)
+                ) : (
+                  <p>No related Gifs found</p>
+                )}
+              </div>
+              <Pagination
+                currentPage={relatedPage}
+                totalPages={relatedTotalPages}
+                onPageChange={handleRelatedPageChange}
+                loading={relatedLoading}
+              />
+            </>
+          )}
         </Suspense>
          
       </div>

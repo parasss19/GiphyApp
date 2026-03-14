@@ -19,7 +19,7 @@ const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
     <>
       {/* url of each gif look like => http://localhost:5173/gif/heatherrobertsart-birthday-happy-cake-wGKrkvHxZT6PVpw635 */}
       <Link to={`/${gif.type}/${gif.slug}`}>
-        <div className="relative w-full mb-2 cursor-pointer group aspect-video png-pattern">
+        <div className="relative w-full cursor-pointer group aspect-video png-pattern">
           <img
             src={gif?.images?.fixed_width?.url}
             alt={gif?.title}

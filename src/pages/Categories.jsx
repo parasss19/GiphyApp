@@ -3,14 +3,13 @@ import { GifContext } from '../context/GifContext';
 import { useParams } from 'react-router-dom';
 import Gif from '../components/Gif';
 import FollowOn from '../components/FollowOn';
-import LoadMore from '../components/LoadMore';
+import Pagination from '../components/Pagination';
 
 const PAGE_SIZE = 20;
 
 const Categories = () => {
   const [results, setResults] = useState([]);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { gf } = useContext(GifContext);
   const { category } = useParams();
@@ -18,21 +17,22 @@ const Categories = () => {
   const fetchCategoryResults = async () => {
     const { data } = await gf.gifs(category, category);
     setResults(data || []);
-    setDisplayCount(PAGE_SIZE);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
-    setDisplayCount(PAGE_SIZE);
     fetchCategoryResults();
   }, [category]);
 
-  const displayedResults = results.slice(1, 1 + displayCount);
-  const hasMoreResults = results.length > 1 + displayCount;
+  const gridResults = results.slice(1);
+  const totalPages = Math.max(1, Math.ceil(gridResults.length / PAGE_SIZE));
+  const displayedResults = gridResults.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
-  const handleLoadMore = () => {
-    setLoadingMore(true);
-    setDisplayCount((prev) => prev + PAGE_SIZE);
-    setLoadingMore(false);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
 
@@ -75,7 +75,11 @@ const Categories = () => {
             <Gif key={gif.id} gif={gif} />
           ))}
         </div>
-        <LoadMore onClick={handleLoadMore} loading={loadingMore} hasMore={hasMoreResults} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
        
     </div>

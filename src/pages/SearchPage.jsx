@@ -2,22 +2,26 @@ import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { GifContext } from '../context/GifContext'
 import FilterGifs from '../components/FilterGifs'
-import LoadMore from '../components/LoadMore'
+import Pagination from '../components/Pagination'
 
 import Loader from '../components/Loader'
 const Gif = lazy(() => import("../components/Gif"))
 
 const PAGE_SIZE = 20
+const DEFAULT_TOTAL_PAGES = 10
 
 const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([])
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [hasMore, setHasMore] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(DEFAULT_TOTAL_PAGES)
+  const [loading, setLoading] = useState(false)
 
   const { gf, filter } = useContext(GifContext)
   const { query } = useParams()
 
-  const fetchSearchResults = async (offset = 0, append = false) => {
+  const fetchSearchResults = async (page = 1) => {
+    setLoading(true)
+    const offset = (page - 1) * PAGE_SIZE
     const { data } = await gf.search(query, {
       limit: PAGE_SIZE,
       offset,
@@ -26,23 +30,26 @@ const SearchPage = () => {
       sort: 'relevant',
     })
     const list = data || []
-    if (append) {
-      setSearchResults((prev) => [...prev, ...list])
+    setSearchResults(list)
+    if (list.length < PAGE_SIZE) {
+      setTotalPages(page)
     } else {
-      setSearchResults(list)
+      setTotalPages((prev) => Math.max(prev, page + 1))
     }
-    setHasMore(list.length === PAGE_SIZE)
+    setLoading(false)
   }
 
   useEffect(() => {
-    setHasMore(true)
-    fetchSearchResults(0, false)
+    setCurrentPage(1)
+    setTotalPages(DEFAULT_TOTAL_PAGES)
   }, [filter, query])
 
-  const handleLoadMore = async () => {
-    setLoadingMore(true)
-    await fetchSearchResults(searchResults.length, true)
-    setLoadingMore(false)
+  useEffect(() => {
+    fetchSearchResults(currentPage)
+  }, [currentPage, filter, query])
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
   }
 
   return (
@@ -50,14 +57,27 @@ const SearchPage = () => {
       <h2 className='text-5xl font-extrabold pb-3'>{query}</h2>
       <FilterGifs alignLeft="true" />
 
-      {searchResults.length ? (
+      {loading && searchResults.length === 0 ? (
+        <Loader />
+      ) : searchResults.length > 0 ? (
         <Suspense fallback={<Loader />}>
-          <div className='columns-2 md:columns-3 lg:columns-4 gap-2'>
-            {searchResults.map((gif) => (
-              <Gif gif={gif} key={gif.id} />
-            ))}
-          </div>
-          <LoadMore onClick={handleLoadMore} loading={loadingMore} hasMore={hasMore} />
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
+                {searchResults.map((gif) => (
+                  <Gif gif={gif} key={gif.id} />
+                ))}
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                loading={loading}
+              />
+            </>
+          )}
         </Suspense>
       ) : (
         <span>No Gifs found for {query}. Try searching for Stickers instead?</span>
