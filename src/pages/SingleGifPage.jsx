@@ -11,7 +11,7 @@ import FollowOn from '../components/FollowOn';
 import { HiChevronDown, HiChevronUp, HiOutlineExternalLink } from 'react-icons/hi';
 import FavDownShare from '../components/FavDownShare';
 
-const Type = ['gif', 'sticker', 'text'];
+const Type = ['gif', 'sticker', 'text', 'emoji'];
 const RELATED_PAGE_SIZE = 15;
 const DEFAULT_RELATED_TOTAL_PAGES = 10;
 
@@ -173,7 +173,7 @@ const SingleGifPage = () => {
           {/*gif*/}
           <div className='w-full sm:w-3/4'>
             <div className='font-bold font-[poppins] text-gray-200 truncate mb-4'>{singleGif.title}</div>
-            <Gif gif={singleGif} preferSmallImage={false} />
+            <Gif gif={singleGif} preferSmallImage={false} showCardActions={false} />
             
           
             {/*Mobile UI - for screen size < sm */}

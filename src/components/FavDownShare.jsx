@@ -1,11 +1,10 @@
 import { useContext, useState } from "react";
-import { HiHeart } from "react-icons/hi";
-import { ImEmbed2 } from "react-icons/im";
+import { HiHeart, HiShare, HiDownload } from "react-icons/hi";
 import { GifContext } from "../context/GifContext";
 import { useParams } from "react-router-dom";
 import { IoMdCopy } from "react-icons/io";
-import { toast } from "react-hot-toast"
-
+import { toast } from "react-hot-toast";
+import ShareDialog from "./ShareDialog";
 
 const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
   const { favorites, addToFavorites } = useContext(GifContext);
@@ -13,6 +12,7 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
 
   const [copyURl, setCopyURl] = useState("");
   const [urlColor, setUrlColor] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   //favourite handler
   const favourite = () => {
@@ -100,17 +100,35 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
         Copy Link
       </button>
 
+      {/* Share btn */}
+      <button
+        onClick={() => setShareOpen(true)}
+        className={`flex ${gap} ${textsize} items-center cursor-pointer text-gray-500 hover:text-gray-200`}
+      >
+        <HiShare
+          size={iconSize}
+          className="transition-transform duration-300 hover:scale-125"
+        />
+        Share
+      </button>
+
       {/* Download btn */}
       <button
         onClick={Download}
         className={`flex ${gap} ${textsize} items-center cursor-pointer text-gray-500 hover:text-gray-200`}
       >
-        <ImEmbed2
+        <HiDownload
           size={iconSize}
           className={`transition-transform duration-300 hover:scale-125`}
         />
         Download
       </button>
+
+      <ShareDialog
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        gif={singleGif}
+      />
     </div>
   );
 };
