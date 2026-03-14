@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useContext, useEffect, useRef, useState } from 'react'
 
 import { GifContext } from '../context/GifContext'
 import FilterGifs from '../components/FilterGifs'
@@ -15,34 +15,49 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(DEFAULT_TOTAL_PAGES)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const skipNextFetchRef = useRef(false)
 
   const fetchTrendingGifs = async (page = 1) => {
     setLoading(true)
-    const offset = (page - 1) * PAGE_SIZE
-    const { data } = await gf.trending({
-      limit: PAGE_SIZE,
-      offset,
-      type: filter,
-      rating: "g",
-    })
-    const list = data || []
-    setGifs(list)
-    if (list.length < PAGE_SIZE) {
-      setTotalPages(page)
-    } else {
-      setTotalPages((prev) => Math.max(prev, page + 1))
+    setError(null)
+    try {
+      const offset = (page - 1) * PAGE_SIZE
+      const { data } = await gf.trending({
+        limit: PAGE_SIZE,
+        offset,
+        type: filter,
+        rating: "g",
+      })
+      const list = data || []
+      setGifs(list)
+      if (list.length < PAGE_SIZE) {
+        setTotalPages(page)
+      } else {
+        setTotalPages((prev) => Math.max(prev, page + 1))
+      }
+    } catch (err) {
+      setError(err?.message || "Failed to load trending GIFs")
+      setGifs([])
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => {
     setCurrentPage(1)
     setTotalPages(DEFAULT_TOTAL_PAGES)
+    skipNextFetchRef.current = true
+    fetchTrendingGifs(1)
   }, [filter])
 
   useEffect(() => {
+    if (skipNextFetchRef.current) {
+      skipNextFetchRef.current = false
+      return
+    }
     fetchTrendingGifs(currentPage)
-  }, [currentPage, filter])
+  }, [currentPage])
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -55,7 +70,9 @@ const HomePage = () => {
       <FilterGifs showTrendingIcon={true} />
 
       <Suspense fallback={<Loader />}>
-        {loading ? (
+        {error ? (
+          <p className="text-red-400 py-4">{error}</p>
+        ) : loading ? (
           <Loader />
         ) : (
           <>

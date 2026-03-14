@@ -23,18 +23,16 @@ const FavDownShare = ({ singleGif, flexprop, gap, textsize, iconSize }) => {
   //Copy to clipboard
   const CopyToBoard = async () => {
     const url = singleGif?.images?.original?.url;
-    navigator.clipboard.writeText(url);
-    const text = await navigator.clipboard.readText();
-    //console.log(text)
-    setCopyURl(text);
-    setUrlColor(true);
-
-    toast.success("Link Copied!");
-
-    //Reset setCopyURl to false after 3 seconds so that blue color will be removed
-    setTimeout(() => {
-      setUrlColor(false);
-    }, 3000);
+    if (!url) return;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyURl(url);
+      setUrlColor(true);
+      toast.success("Link Copied!");
+      setTimeout(() => setUrlColor(false), 3000);
+    } catch {
+      toast.error("Failed to copy link");
+    }
   };
 
   //Download logic

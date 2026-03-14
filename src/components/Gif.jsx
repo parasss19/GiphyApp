@@ -5,21 +5,21 @@ import { GifContext } from "../context/GifContext"
 import toast from "react-hot-toast"
 
 const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
+  if (!gif) return null
   const { favorites, addToFavorites } = useContext(GifContext)
   const isFavorited = favorites.includes(gif.id)
+  const hasValidLink = gif.type && gif.slug
 
   const handleRemoveFromFavorites = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    if (!gif?.id) return
     const added = addToFavorites(gif.id)
     toast.success(added ? "Added to Favorites" : "Removed from Favorites")
   }
 
-  return (
-    <>
-      {/* url of each gif look like => http://localhost:5173/gif/heatherrobertsart-birthday-happy-cake-wGKrkvHxZT6PVpw635 */}
-      <Link to={`/${gif.type}/${gif.slug}`}>
-        <div className="relative w-full cursor-pointer group aspect-video png-pattern">
+  const content = (
+    <div className="relative w-full cursor-pointer group aspect-video png-pattern">
           <img
             src={gif?.images?.fixed_width?.url}
             alt={gif?.title}
@@ -65,7 +65,15 @@ const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
             </div>
           )}
         </div>
-      </Link>
+  )
+
+  return (
+    <>
+      {hasValidLink ? (
+        <Link to={`/${gif.type}/${gif.slug}`}>{content}</Link>
+      ) : (
+        <div>{content}</div>
+      )}
     </>
   )
 }

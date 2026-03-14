@@ -4,7 +4,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange, loading = false }) 
   if (totalPages <= 1) return null;
 
   const handlePageClick = (page) => {
-    onPageChange(page);
+    const validPage = Math.max(1, Math.min(page, totalPages));
+    onPageChange(validPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

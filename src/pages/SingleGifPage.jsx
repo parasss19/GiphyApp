@@ -24,46 +24,70 @@ const SingleGifPage = () => {
   const [relatedPage, setRelatedPage] = useState(1);
   const [relatedTotalPages, setRelatedTotalPages] = useState(DEFAULT_RELATED_TOTAL_PAGES);
   const [relatedLoading, setRelatedLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const gifId = slug?.split("-")?.[slug.split("-").length - 1];
+  const hasValidId = Boolean(gifId);
 
   useEffect(() => {
     if (!Type.includes(type)) {
       throw new Error("Invalid Content Type");
     }
+    if (!hasValidId) {
+      setError("Invalid GIF");
+      return;
+    }
+    setError(null);
     const fetchSingleGif = async () => {
-      const { data } = await gf.gif(gifId);
-      setSingleGif(data);
+      try {
+        const { data } = await gf.gif(gifId);
+        setSingleGif(data);
+      } catch (err) {
+        setError(err?.message || "Failed to load GIF");
+      }
     };
     fetchSingleGif();
     setRelatedPage(1);
     setRelatedTotalPages(DEFAULT_RELATED_TOTAL_PAGES);
-  }, [gf, slug, type, gifId]);
+  }, [gf, slug, type, gifId, hasValidId]);
 
   useEffect(() => {
+    if (!hasValidId) return;
     const fetchRelatedGif = async () => {
       setRelatedLoading(true);
-      const offset = (relatedPage - 1) * RELATED_PAGE_SIZE;
-      const { data: related } = await gf.related(gifId, {
-        limit: RELATED_PAGE_SIZE,
-        offset,
-      });
-      const list = related || [];
-      setRelatedGifs(list);
-      if (list.length < RELATED_PAGE_SIZE) {
-        setRelatedTotalPages(relatedPage);
-      } else {
-        setRelatedTotalPages((prev) => Math.max(prev, relatedPage + 1));
+      try {
+        const offset = (relatedPage - 1) * RELATED_PAGE_SIZE;
+        const { data: related } = await gf.related(gifId, {
+          limit: RELATED_PAGE_SIZE,
+          offset,
+        });
+        const list = related || [];
+        setRelatedGifs(list);
+        if (list.length < RELATED_PAGE_SIZE) {
+          setRelatedTotalPages(relatedPage);
+        } else {
+          setRelatedTotalPages((prev) => Math.max(prev, relatedPage + 1));
+        }
+      } catch {
+        setRelatedGifs([]);
+      } finally {
+        setRelatedLoading(false);
       }
-      setRelatedLoading(false);
     };
     fetchRelatedGif();
-  }, [gf, gifId, relatedPage]);
+  }, [gf, gifId, relatedPage, hasValidId]);
 
   const handleRelatedPageChange = (page) => {
     setRelatedPage(page);
   };
 
+  if (!hasValidId || error) {
+    return (
+      <div className="my-4">
+        <p className="text-red-400">{error || "Invalid GIF"}</p>
+      </div>
+    );
+  }
 
   return (
     <div className='grid grid-cols-4 my-4 gap-4'>

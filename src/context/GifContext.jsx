@@ -1,6 +1,6 @@
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 
 const GifContext = createContext();     
 
@@ -15,8 +15,7 @@ const GifProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loadingUser, setLoadingUser] = useState(true);
 
-
-    const gf = new GiphyFetch(import.meta.env.VITE_GIPHY_KEY)  
+    const gf = useMemo(() => new GiphyFetch(import.meta.env.VITE_GIPHY_KEY), []);
     const backendURL = import.meta.env.VITE_BACKEND_URL
 
     //fetch user authentication status

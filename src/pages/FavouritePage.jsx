@@ -41,9 +41,14 @@ const FavouritePage = () => {
     if (idsToFetch.length === 0) return;
     setLoading(true);
     const fetchFavoriteGifs = async () => {
-      const { data } = await gf.gifs(idsToFetch);
-      setFavoriteGifs(data || []);
-      setLoading(false);
+      try {
+        const { data } = await gf.gifs(idsToFetch);
+        setFavoriteGifs(data || []);
+      } catch {
+        setFavoriteGifs([]);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchFavoriteGifs();
   }, [gf, favorites, currentPage]);

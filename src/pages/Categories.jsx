@@ -10,14 +10,21 @@ const PAGE_SIZE = 20;
 const Categories = () => {
   const [results, setResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
 
   const { gf } = useContext(GifContext);
   const { category } = useParams();
 
   const fetchCategoryResults = async () => {
-    const { data } = await gf.gifs(category, category);
-    setResults(data || []);
-    setCurrentPage(1);
+    try {
+      const { data } = await gf.gifs(category, category);
+      setResults(data || []);
+      setCurrentPage(1);
+      setError(null);
+    } catch (err) {
+      setError(err?.message || "Failed to load category");
+      setResults([]);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +48,7 @@ const Categories = () => {
       
       {/* left side(on large screen) =  Render Single gif of selected category on */}
       <div className=''>
+        {error && <p className="text-red-400 mb-2">{error}</p>}
         {results.slice(0,1).map((gif) => (
           <Gif key={gif.id} gif={gif}  />
         ))}  
