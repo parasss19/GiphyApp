@@ -5,6 +5,7 @@ import FilterGifs from '../components/FilterGifs'
 import Pagination from '../components/Pagination'
 
 import Loader from '../components/Loader'
+import { GifGridSkeleton } from '../components/GifSkeleton'
 const Gif = lazy(() => import("../components/Gif"))
 
 const PAGE_SIZE = 20
@@ -89,13 +90,13 @@ const SearchPage = () => {
       <FilterGifs alignLeft="true" />
 
       {loading && searchResults.length === 0 ? (
-        <Loader />
+        <GifGridSkeleton count={20} />
       ) : error ? (
         <p className="text-red-400 py-4">{error}</p>
       ) : searchResults.length > 0 ? (
         <Suspense fallback={<Loader />}>
           {loading ? (
-            <Loader />
+            <GifGridSkeleton count={20} />
           ) : (
             <>
               <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>

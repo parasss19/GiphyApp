@@ -4,6 +4,7 @@ import { GifContext } from '../context/GifContext';
 
 import Loader from '../components/Loader';
 import Pagination from '../components/Pagination';
+import { GifGridSkeleton } from '../components/GifSkeleton';
 const Gif = lazy(() => import("../components/Gif"));
 
 import FollowOn from '../components/FollowOn';
@@ -172,7 +173,7 @@ const SingleGifPage = () => {
           {/*gif*/}
           <div className='w-full sm:w-3/4'>
             <div className='font-bold font-[poppins] text-gray-200 truncate mb-4'>{singleGif.title}</div>
-            <Gif gif={singleGif}/>
+            <Gif gif={singleGif} preferSmallImage={false} />
             
           
             {/*Mobile UI - for screen size < sm */}
@@ -218,7 +219,7 @@ const SingleGifPage = () => {
 
         <Suspense fallback={<Loader />}>
           {relatedLoading ? (
-            <Loader />
+            <GifGridSkeleton count={15} />
           ) : (
             <>
               <div className='mt-5 grid grid-cols-2 md:grid-cols-3 gap-2'>

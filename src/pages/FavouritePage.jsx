@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useContext, useEffect, useState } from 'react'
 import { GifContext } from '../context/GifContext'
 import Pagination from '../components/Pagination'
 
-import Loader from '../components/Loader'
+import { GifGridSkeleton } from '../components/GifSkeleton'
 const Gif = lazy(() => import("../components/Gif"))
 
 const PAGE_SIZE = 20
@@ -66,7 +66,7 @@ const FavouritePage = () => {
       {favoriteGifs.length > 0 || (favorites.length > 0 && loading) ? (
         <Suspense fallback={<Loader />}>
           {loading ? (
-            <Loader />
+            <GifGridSkeleton count={20} />
           ) : (
             <>
               <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-6'>

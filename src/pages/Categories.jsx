@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Gif from '../components/Gif';
 import FollowOn from '../components/FollowOn';
 import Pagination from '../components/Pagination';
+import { GifGridSkeleton } from '../components/GifSkeleton';
 
 const PAGE_SIZE = 20;
 
@@ -11,11 +12,13 @@ const Categories = () => {
   const [results, setResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { gf } = useContext(GifContext);
   const { category } = useParams();
 
   const fetchCategoryResults = async () => {
+    setLoading(true);
     try {
       const { data } = await gf.gifs(category, category);
       setResults(data || []);
@@ -24,6 +27,8 @@ const Categories = () => {
     } catch (err) {
       setError(err?.message || "Failed to load category");
       setResults([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,16 +83,22 @@ const Categories = () => {
         </h2>
 
         {/* gifs rendering */}
-        <div className='my-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
-          {displayedResults.map((gif) => (
-            <Gif key={gif.id} gif={gif} />
-          ))}
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        {loading ? (
+          <GifGridSkeleton count={20} className="my-4" />
+        ) : (
+          <>
+            <div className='my-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
+              {displayedResults.map((gif) => (
+                <Gif key={gif.id} gif={gif} />
+              ))}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
       </div>
        
     </div>

@@ -5,6 +5,7 @@ import FilterGifs from '../components/FilterGifs'
 import Pagination from '../components/Pagination'
 
 import Loader from '../components/Loader'
+import { GifGridSkeleton } from '../components/GifSkeleton'
 const Gif = lazy(() => import("../components/Gif"))
 
 const PAGE_SIZE = 20
@@ -73,7 +74,7 @@ const HomePage = () => {
         {error ? (
           <p className="text-red-400 py-4">{error}</p>
         ) : loading ? (
-          <Loader />
+          <GifGridSkeleton count={20} />
         ) : (
           <>
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>

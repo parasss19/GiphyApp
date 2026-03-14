@@ -1,14 +1,31 @@
+import { memo } from "react"
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import { HiHeart } from "react-icons/hi"
 import { GifContext } from "../context/GifContext"
 import toast from "react-hot-toast"
 
-const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
+// Grid: fixed_width (200px) + WebP for fast load and decent quality (lighter than downsized_*)
+const getGridImageUrl = (images) => {
+  const fw = images?.fixed_width
+  return fw?.webp || fw?.url
+}
+
+// Hero (single GIF page): downsized_medium only – better than grid but still quick to play
+const getHeroImageUrl = (images) => {
+  const dm = images?.downsized_medium
+  return dm?.webp || dm?.url || getGridImageUrl(images)
+}
+
+const Gif = ({ gif, hover = true, showRemoveFromFavorites = false, preferSmallImage = true }) => {
   if (!gif) return null
   const { favorites, addToFavorites } = useContext(GifContext)
   const isFavorited = favorites.includes(gif.id)
   const hasValidLink = gif.type && gif.slug
+  const imgUrl = preferSmallImage
+    ? getGridImageUrl(gif.images)
+    : getHeroImageUrl(gif.images)
+  if (!imgUrl) return null
 
   const handleRemoveFromFavorites = (e) => {
     e.preventDefault()
@@ -21,8 +38,10 @@ const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
   const content = (
     <div className="relative w-full cursor-pointer group aspect-video png-pattern">
           <img
-            src={gif?.images?.fixed_width?.url}
+            src={imgUrl}
             alt={gif?.title}
+            loading="lazy"
+            decoding="async"
             className="w-full rounded object-cover transition-all duration-300 "
           />
 
@@ -78,4 +97,4 @@ const Gif = ({ gif, hover = true, showRemoveFromFavorites = false }) => {
   )
 }
 
-export default Gif
+export default memo(Gif)
